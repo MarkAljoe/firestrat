@@ -28,32 +28,51 @@ $active = 'dashboard';
 
   <main>
     <div class="topbar">
-      <div class="page-title">Dashboard overview</div>
+      <button class="iconbtn" id="mobileMenuBtn" title="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+      <div class="page-title" style="flex:1;text-align:center;">Dashboard overview</div>
       <div class="topbar-right">
         <div class="search">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
           <input id="searchInput" placeholder="Search incidents…">
         </div>
-        <button class="iconbtn" id="themeBtn" title="Toggle dark mode"><svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"></svg></button>
+        <button class="iconbtn" id="themeBtn" title="Toggle dark mode">
+          <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"></svg>
+        </button>
         <button class="iconbtn" id="splitBtn" title="Toggle split analytics view">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="18" rx="1.5"/><rect x="13" y="3" width="8" height="18" rx="1.5"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="8" height="18" rx="1.5"/>
+            <rect x="13" y="3" width="8" height="18" rx="1.5"/>
+          </svg>
         </button>
       </div>
     </div>
 
     <div class="cards">
-      <div class="card"><div class="lbl">Total incidents</div><div class="val"><?= $totalIncidents ?></div><div class="delta up">Live count</div></div>
-      <div class="card"><div class="lbl">High-risk zones</div><div class="val"><?= $highRiskZones ?></div><div class="delta warn">barangays</div></div>
-      <div class="card"><div class="lbl">Active hydrants</div><div class="val"><?= $activeHydrants ?></div><div class="delta ok"><?= $hydrantPct ?>% operational</div></div>
+      <a href="incident_log.php" class="card" style="text-decoration:none;color:inherit;">
+        <div class="lbl">Total incidents</div>
+        <div class="val"><?= $totalIncidents ?></div>
+        <div class="delta up">Live count</div>
+      </a>
+      <div class="card">
+        <div class="lbl">High-risk zones</div>
+        <div class="val"><?= $highRiskZones ?></div>
+        <div class="delta warn">barangays</div>
+      </div>
+      <a href="hydrants.php" class="card" style="text-decoration:none;color:inherit;">
+        <div class="lbl">Active hydrants</div>
+        <div class="val"><?= $activeHydrants ?></div>
+        <div class="delta ok"><?= $hydrantPct ?>% operational</div>
+      </a>
       <a href="reports.php" class="card" style="text-decoration:none;color:inherit;">
-  <div class="lbl">Pending reports</div>
-  <div class="val"><?= $pendingReports ?></div>
-  <div class="delta warn">Awaiting approval</div>
-</a>
+        <div class="lbl">Pending reports</div>
+        <div class="val"><?= $pendingReports ?></div>
+        <div class="delta warn">Awaiting approval</div>
+      </a>
     </div>
 
     <div class="grid" id="mainGrid">
-    
       <div class="panel map-panel" id="map">
         <div class="panel-head">
           <h3>Virac hazard map</h3>
@@ -83,24 +102,50 @@ $active = 'dashboard';
       <div class="bars" id="barsWrap"></div>
     </div>
 
-    <!-- <div class="panel" id="incidents" style="margin-top:16px;">
-      <div class="panel-head"><h3>Log a new incident</h3></div>
-      <div class="report-form">
-        <label>Barangay</label>
-        <select id="fBrgy"></select>
-        <label>Risk level</label>
-        <select id="fRisk"><option value="high">High</option><option value="moderate">Moderate</option><option value="low">Low</option></select>
-        <label>Notes</label>
-        <textarea id="fNotes" rows="2" placeholder="Short description…"></textarea>
-        <div id="formMsg" class="form-msg"></div>
-        <button id="submitIncident">Add incident</button>
-      </div>
-    </div>
   </main>
-</div> -->
+</div><!-- /#app -->
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>window.FIRESTRAT_MODE = 'admin';</script>
 <script src="assets/js/app.js"></script>
+
+<!-- ── Barangay Info Modal ── -->
+<div id="brgy-info-modal" style="
+  display:none;position:fixed;inset:0;z-index:10000;
+  background:rgba(0,0,0,0.65);
+  align-items:center;justify-content:center;
+  padding:16px;
+">
+  <div style="
+    background:var(--panel-2,#1a1a1a);
+    border:1px solid var(--line,#2a2a2a);
+    border-radius:14px;
+    width:100%;max-width:460px;
+    max-height:90vh;
+    display:flex;flex-direction:column;
+    box-shadow:0 8px 32px rgba(0,0,0,0.6);
+  ">
+    <div style="
+      display:flex;align-items:center;justify-content:space-between;
+      padding:16px 20px 12px;
+      border-bottom:1px solid var(--line,#2a2a2a);
+      flex-shrink:0;
+    ">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:32px;height:32px;border-radius:8px;background:var(--ember,#e03e1a);display:flex;align-items:center;justify-content:center;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="16" height="16">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <strong style="font-size:15px;color:var(--ink,#fff);">Barangay Info</strong>
+      </div>
+      <button onclick="document.getElementById('brgy-info-modal').style.display='none'"
+        style="background:none;border:none;color:var(--ink-dim,#888);font-size:22px;cursor:pointer;line-height:1;padding:4px 8px;border-radius:6px;">×</button>
+    </div>
+    <div id="brgy-info-body" style="overflow-y:auto;padding:20px;"></div>
+  </div>
+</div>
+
 </body>
 </html>

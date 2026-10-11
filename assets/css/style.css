@@ -23,8 +23,8 @@ a{color:inherit;}
 #app{display:flex;min-height:100vh;}
 .sidebar{width:220px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:20px 14px;gap:4px;}
 .brand{display:flex;align-items:center;gap:10px;padding:6px 8px 20px 8px;}
-.brand .mark{width:34px;height:34px;border-radius:8px;background:var(--ember);flex-shrink:0;position:relative;}
-.brand .mark::after{content:"";position:absolute;inset:9px;border-radius:3px;background:#fff2;}
+.brand .mark{width:34px;height:34px;border-radius:0;background:none;flex-shrink:0;position:relative;}
+.brand .mark::after{content:none;}
 .brand-text .title{font-family:'Oswald';font-size:17px;font-weight:600;line-height:1;}
 .brand-text .sub{font-size:10.5px;color:var(--ink-dim);margin-top:3px;}
 .nav-label{font-size:10px;letter-spacing:.12em;color:var(--ink-dim);text-transform:uppercase;padding:14px 10px 6px;}
@@ -40,9 +40,9 @@ a{color:inherit;}
 .logout-link{font-size:11px;color:var(--ink-dim);margin-left:auto;}
 
 main{flex:1;min-width:0;padding:22px 28px 60px;}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap;}
-.page-title{font-family:'Oswald';font-size:22px;font-weight:600;}
-.topbar-right{display:flex;align-items:center;gap:12px;}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap;position:relative;}
+.page-title{font-family:'Oswald';font-size:18px;font-weight:600;flex:1;text-align:center;white-space:nowrap;}
+.topbar-right{display:flex;align-items:center;gap:8px;}
 .search{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 12px;min-width:200px;}
 .search input{border:none;background:transparent;outline:none;color:var(--ink);font-size:13px;width:100%;}
 .search svg{width:14px;height:14px;color:var(--ink-dim);flex-shrink:0;}
@@ -141,7 +141,7 @@ main{flex:1;min-width:0;padding:22px 28px 60px;}
   .comm-actions{grid-template-columns:1fr;}
   .comm-zone{flex-wrap:wrap;}
   .comm-zone > div:first-child{flex:1 1 100%;}
-  #mobileMenuBtn{display:inline-flex;margin-right:10px;}
+  #mobileMenuBtn{display:inline-flex;z-index:100;}
   .sidebar.open{display:flex;position:fixed;top:0;left:0;bottom:0;width:260px;z-index:9999;box-shadow:2px 0 20px rgba(0,0,0,.4);}
   .sidebar-backdrop.open{display:block;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;}
 }

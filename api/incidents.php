@@ -8,11 +8,11 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'GET') {
     $q = trim($_GET['q'] ?? '');
-    $sql = 'SELECT i.id, i.risk_level, i.notes, i.reported_by, i.reporter_name, i.status,
-                   i.created_at, b.id AS barangay_id, b.name AS barangay_name,
-                   COALESCE(i.lat, b.lat) AS lat, COALESCE(i.lng, b.lng) AS lng
-            FROM incidents i
-            JOIN barangays b ON b.id = i.barangay_id';
+    $sql = 'SELECT i.id, i.ticket_number, i.risk_level, i.notes, i.reported_by, i.reporter_name, i.status,
+               i.created_at, b.id AS barangay_id, b.name AS barangay_name,
+               COALESCE(i.lat, b.lat) AS lat, COALESCE(i.lng, b.lng) AS lng
+        FROM incidents i
+        JOIN barangays b ON b.id = i.barangay_id';
     $params = [];
     if ($q !== '') {
         $sql .= ' WHERE b.name LIKE ? OR i.notes LIKE ?';
@@ -58,7 +58,9 @@ try {
      VALUES (?, ?, ?, ?, ?, ?, ?, "active")'
 );
 $stmt->execute([$barangayId, $riskLevel, $notes, $reportedBy, $approvalStatus, $reporterName, $reporterContact]);
-        $newId = $db->lastInsertId();
+$newId = $db->lastInsertId();
+$ticket = 'TKT-' . str_pad($newId, 5, '0', STR_PAD_LEFT);
+$db->prepare('UPDATE incidents SET ticket_number = ? WHERE id = ?')->execute([$ticket, $newId]);
         if ($approvalStatus === 'approved') {
             // Keep the barangay's displayed risk level in sync with its most recent incident
             $upd = $db->prepare('UPDATE barangays SET risk_level = ? WHERE id = ?');
