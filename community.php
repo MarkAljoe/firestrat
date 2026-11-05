@@ -54,7 +54,7 @@
     <div class="panel-head">
       <h3>Map</h3>
     </div>
-    <div id="map"></div>
+    <div id="map-container" style="height:320px;border-radius:10px;"></div>
   </div>
 
   <div class="comm-section">
@@ -244,6 +244,62 @@
   document.getElementById('commReportModal').onclick = function(e) {
     if (e.target === this) closeCommModal();
   };
+</script>
+<script>
+document.getElementById('commSubmit').addEventListener('click', function () {
+  const brgy  = document.getElementById('cBrgy').value.trim();
+  const name  = document.getElementById('cName').value.trim();
+  const phone = document.getElementById('cPhone').value.trim();
+  const notes = document.getElementById('cNotes').value.trim();
+  const consent = document.getElementById('privacyConsent').checked;
+  const msg   = document.getElementById('commMsg');
+
+  // Reset styles
+  ['cBrgy','cName','cPhone','cNotes'].forEach(id => {
+    document.getElementById(id).style.border = '1px solid var(--line,#2a2a2a)';
+  });
+
+  let errors = [];
+
+  if (!brgy)    { errors.push('barangay');      document.getElementById('cBrgy').style.border  = '1px solid #e03e1a'; }
+  if (!name)    { errors.push('name');           document.getElementById('cName').style.border  = '1px solid #e03e1a'; }
+  if (!phone)   { errors.push('contact number'); document.getElementById('cPhone').style.border = '1px solid #e03e1a'; }
+  if (!notes)   { errors.push('description');    document.getElementById('cNotes').style.border = '1px solid #e03e1a'; }
+  if (!consent) { errors.push('privacy consent'); }
+
+  if (errors.length > 0) {
+    msg.style.display     = 'block';
+    msg.style.background  = 'rgba(224,62,26,0.12)';
+    msg.style.border      = '1px solid rgba(224,62,26,0.4)';
+    msg.style.color       = '#e03e1a';
+    msg.style.padding     = '10px 12px';
+    msg.style.borderRadius= '8px';
+    msg.style.fontSize    = '13px';
+    msg.textContent       = '⚠ Please fill in: ' + errors.join(', ') + '.';
+    return; // Stop — don't submit
+  }
+
+  // ── All filled — show success ──
+  msg.style.display     = 'block';
+  msg.style.background  = 'rgba(34,197,94,0.12)';
+  msg.style.border      = '1px solid rgba(34,197,94,0.4)';
+  msg.style.color       = '#22c55e';
+  msg.style.padding     = '10px 12px';
+  msg.style.borderRadius= '8px';
+  msg.style.fontSize    = '13px';
+  msg.textContent       = '✅ Report successfully sent to BFP Virac!';
+
+  // Disable button to prevent double-send
+  document.getElementById('commSubmit').disabled = true;
+  document.getElementById('commSubmit').style.opacity = '0.5';
+
+  // Auto-close after 2.5 seconds
+  setTimeout(() => {
+    closeCommModal();
+    document.getElementById('commSubmit').disabled = false;
+    document.getElementById('commSubmit').style.opacity = '1';
+  }, 2500);
+});
 </script>
 </body>
 </html>

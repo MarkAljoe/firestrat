@@ -2,6 +2,7 @@
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/auth.php';
 requireLogin();
+requireRole(['admin', 'fire_marshal']);
 
 $db = getDB();
 $active = 'barangays';

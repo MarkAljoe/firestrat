@@ -260,11 +260,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </form>
 
       <div class="login-hints">
-        <!-- Demo account — username <code>fmarshal</code> / password <code>firestrat123</code><br> -->
-        <a href="community.php">Continue as community member →</a>
+        <a href="community.php">Continue as community member →</a><br>
+        <a href="#" onclick="document.getElementById('aboutModal').style.display='flex';return false;">About FireStrat</a>
       </div>
     </div>
 
   </div>
+
+  <!-- About Modal -->
+<div id="aboutModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.65);align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:16px;width:100%;max-width:460px;box-shadow:0 24px 60px rgba(0,0,0,0.4);overflow:hidden;">
+
+    <!-- Header -->
+    <div style="background:#1a0a0a;padding:28px 28px 24px;text-align:center;position:relative;">
+      <img src="assets/img/logo.png" alt="FireStrat Logo" style="width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 4px 16px rgba(200,40,10,0.4));">
+      <div style="font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;color:#fff;margin-top:10px;">FireStrat</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.45);margin-top:3px;letter-spacing:.03em;">BFP Virac · Catanduanes</div>
+      <button onclick="document.getElementById('aboutModal').style.display='none'"
+        style="position:absolute;top:14px;right:16px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:22px;cursor:pointer;line-height:1;">×</button>
+    </div>
+
+    <!-- Body -->
+    <div style="padding:24px 28px;display:flex;flex-direction:column;gap:14px;">
+
+      <p style="font-size:13.5px;color:#444;line-height:1.7;margin:0;">
+        <strong style="color:#1a1a1a;">FireStrat</strong> is a fire incident mapping and response management system developed for the
+        Bureau of Fire Protection (BFP) Virac, Catanduanes. It helps fire officers monitor hazard zones,
+        manage hydrants, and coordinate incident reports across barangays.
+      </p>
+
+      <div style="border-top:1px solid #eee;padding-top:14px;display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;font-size:13px;">
+          <span style="color:#888;">Version</span>
+          <span style="color:#1a1a1a;font-weight:600;">1.0.0</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;">
+          <span style="color:#888;">Agency</span>
+          <span style="color:#1a1a1a;font-weight:600;">BFP Virac, Catanduanes</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;">
+          <span style="color:#888;">Coverage</span>
+          <span style="color:#1a1a1a;font-weight:600;">Virac, Catanduanes</span>
+        </div>
+      </div>
+
+      <button onclick="document.getElementById('aboutModal').style.display='none'"
+        style="margin-top:4px;width:100%;padding:11px;background:#c0392b;color:#fff;border:none;border-radius:9px;
+               font-size:14px;font-weight:600;font-family:'Oswald',sans-serif;letter-spacing:.05em;cursor:pointer;">
+        Close
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('aboutModal').addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+  });
+</script>
+</body>
+</html>
+
 </body>
 </html>

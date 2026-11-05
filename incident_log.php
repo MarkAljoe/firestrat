@@ -276,7 +276,35 @@ $incidents = $stmt->fetchAll();
     </div>
 
     <div class="panel" style="margin-top:16px;">
-      <div class="panel-head"><h3>All incidents & reports</h3></div>
+      <div class="panel-head">
+  <h3>All incidents & reports</h3>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <a href="export_csv.php" style="
+      display:flex;align-items:center;gap:6px;
+      padding:8px 14px;border-radius:8px;
+      background:var(--panel,#111);
+      border:1px solid var(--line,#2a2a2a);
+      color:var(--ink,#fff);font-size:13px;font-weight:600;
+      text-decoration:none;font-family:inherit;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+      </svg>
+      CSV
+    </a>
+    <a href="export_pdf.php" style="
+      display:flex;align-items:center;gap:6px;
+      padding:8px 14px;border-radius:8px;
+      background:var(--panel,#111);
+      border:1px solid var(--line,#2a2a2a);
+      color:var(--ink,#fff);font-size:13px;font-weight:600;
+      text-decoration:none;font-family:inherit;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+      </svg>
+      PDF
+    </a>
+  </div>
+</div>
       <div style="padding:12px 18px 18px;">
         <?php if (!$incidents): ?>
           <p style="color:var(--ink-dim);margin:8px 0 0;">No incidents found.</p>
@@ -367,6 +395,35 @@ $incidents = $stmt->fetchAll();
 
             <!-- ── View Reports Panel ── -->
             <div class="view-reports-panel" id="view-reports-<?= $i['id'] ?>">
+
+            <!-- Download buttons -->
+              <div style="display:flex;gap:8px;margin-bottom:16px;">
+                <a href="export_csv.php?id=<?= $i['id'] ?>" style="
+                  display:flex;align-items:center;gap:6px;
+                  padding:7px 14px;border-radius:8px;
+                  background:var(--panel,#111);
+                  border:1px solid var(--line,#2a2a2a);
+                  color:var(--ink,#fff);font-size:12px;font-weight:600;
+                  text-decoration:none;font-family:inherit;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                  </svg>
+                  Download CSV
+                </a>
+                <a href="export_pdf.php?id=<?= $i['id'] ?>" style="
+                  display:flex;align-items:center;gap:6px;
+                  padding:7px 14px;border-radius:8px;
+                  background:var(--panel,#111);
+                  border:1px solid var(--line,#2a2a2a);
+                  color:var(--ink,#fff);font-size:12px;font-weight:600;
+                  text-decoration:none;font-family:inherit;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                  </svg>
+                  Download PDF
+                </a>
+              </div>
+
 
               <!-- Community/Hotline original report -->
               <p class="report-section-label">Original report</p>

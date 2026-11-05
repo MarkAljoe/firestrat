@@ -20,3 +20,15 @@ function currentUser(): ?array {
         'role'      => $_SESSION['role'],
     ];
 }
+
+function requireRole(array $allowed): void {
+    requireLogin();
+    if (!in_array($_SESSION['role'] ?? '', $allowed, true)) {
+        header('Location: index.php');
+        exit;
+    }
+}
+
+function hasRole(array $allowed): bool {
+    return in_array($_SESSION['role'] ?? '', $allowed, true);
+}

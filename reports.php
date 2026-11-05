@@ -38,27 +38,21 @@ $barangays = $db->query('SELECT id, name FROM barangays ORDER BY name')->fetchAl
         <button class="iconbtn" id="themeBtn" title="Toggle dark mode">
           <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"></svg>
         </button>
-        <!-- Add Report Button -->
-        <button class="iconbtn" id="openAddReport" title="Add report" style="color:var(--ember);">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 8v8M8 12h8"/>
-          </svg>
-        </button>
       </div>
     </div>
 
     <div class="panel" style="margin-top:16px;">
-      <div class="panel-head">
+            <div class="panel-head">
         <h3>Awaiting approval</h3>
-        <button class="iconbtn" id="openAddReport2" title="Add report"
-          style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;
-                 background:var(--ember);color:#fff;font-size:13px;font-weight:600;border:none;cursor:pointer;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
-            <path d="M12 5v14M5 12h14"/>
-          </svg>
-          Add report
-        </button>
+        <button id="openAddReport2"
+            style="display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;
+                   background:var(--ember);color:#fff;font-size:13px;font-weight:600;
+                   border:none;cursor:pointer;font-family:inherit;letter-spacing:.01em;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            Add report
+          </button>
       </div>
       <div id="pendingReportsList" style="padding:16px 18px;">
         <?php if (!$pending): ?>
@@ -206,7 +200,6 @@ $barangays = $db->query('SELECT id, name FROM barangays ORDER BY name')->fetchAl
     msg.style.display = 'none'; msg.textContent = '';
   }
 
-  document.getElementById('openAddReport').onclick  = openModal;
   document.getElementById('openAddReport2').onclick = openModal;
   document.getElementById('closeAddReport').onclick  = closeModal;
   document.getElementById('cancelAddReport').onclick = closeModal;
@@ -216,7 +209,7 @@ $barangays = $db->query('SELECT id, name FROM barangays ORDER BY name')->fetchAl
     if (e.target === this) closeModal();
   };
 
-  // ── Submit ──
+  // ── Submit Button Report──
   document.getElementById('submitAddReport').onclick = async function () {
     const btn         = this;
     const barangay_id = document.getElementById('mBrgy').value;
@@ -226,9 +219,28 @@ $barangays = $db->query('SELECT id, name FROM barangays ORDER BY name')->fetchAl
     const reporter_contact = document.getElementById('mPhone').value.trim();
     const msg = document.getElementById('modalMsg');
 
+    // Reset borders
+    ['mNotes'].forEach(id => {
+      document.getElementById(id).style.border = '1px solid var(--line,#2a2a2a)';
+    });
+
+    let errors = [];
+
     if (!notes) {
-      msg.className = 'form-msg err'; msg.textContent = 'Please enter details about the incident.';
-      msg.style.display = 'block'; return;
+      errors.push('details / notes');
+      document.getElementById('mNotes').style.border = '1px solid #e03e1a';
+    }
+
+    if (errors.length > 0) {
+      msg.style.display      = 'block';
+      msg.style.background   = 'rgba(224,62,26,0.12)';
+      msg.style.border       = '1px solid rgba(224,62,26,0.4)';
+      msg.style.color        = '#e03e1a';
+      msg.style.padding      = '10px 12px';
+      msg.style.borderRadius = '8px';
+      msg.style.fontSize     = '13px';
+      msg.textContent        = '⚠ Please fill in: ' + errors.join(', ') + '.';
+      return;
     }
 
     btn.disabled = true; btn.textContent = 'Submitting…';

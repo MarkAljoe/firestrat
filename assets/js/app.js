@@ -36,41 +36,31 @@
 
   /* ---------------- MAP ---------------- */
   function initMap() {
-    const mapEl = document.getElementById('map');
+    const mapEl = document.getElementById('map-container');
     if (!mapEl) return;
+
     const VIRAC_BOUNDS = L.latLngBounds(
       [13.4800, 124.1200],
       [13.6800, 124.3500]
     );
-    map = L.map('map', {
+    map = L.map('map-container', {
       zoomControl: true,
       maxBounds: VIRAC_BOUNDS,
       maxBoundsViscosity: 1.0,
       minZoom: 12
     }).setView(VIRAC_CENTER, 14);
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
     markersLayer = L.layerGroup().addTo(map);
 
-    // Bottom-right legend
     const legend = L.control({ position: 'bottomright' });
     legend.onAdd = function () {
       const div = L.DomUtil.create('div');
       div.innerHTML = `
-        <div style="
-          background:rgba(20,20,30,0.92);
-          border:1px solid rgba(255,255,255,0.12);
-          border-radius:10px;
-          padding:10px 14px;
-          font-family:Inter,sans-serif;
-          font-size:12px;
-          color:#f0f0f0;
-          min-width:130px;
-          box-shadow:0 2px 8px rgba(0,0,0,0.5);
-          margin-bottom:6px;
-        ">
+        <div style="background:rgba(20,20,30,0.92);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:10px 14px;font-family:Inter,sans-serif;font-size:12px;color:#f0f0f0;min-width:130px;box-shadow:0 2px 8px rgba(0,0,0,0.5);margin-bottom:6px;">
           <div style="font-weight:600;margin-bottom:8px;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.7;">LEGEND</div>
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#D6472E;flex-shrink:0;"></span>High risk</div>
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#E8963E;flex-shrink:0;"></span>Moderate</div>
@@ -344,7 +334,7 @@ marker.on('popupopen', function() {
     });
 
     // Virac Fire Station
-    const fireStation = L.marker([13.5785, 124.2172], { icon: fireStationIcon() }).addTo(markersLayer);
+    const fireStation = L.marker([13.584781, 124.236493], { icon: fireStationIcon() }).addTo(markersLayer);
     fireStation.bindPopup(
       `<div class="popup-title">🚒 Virac Fire Station</div>
        <div class="popup-row">BFP Virac, Catanduanes</div>
@@ -504,6 +494,70 @@ marker.on('popupopen', function() {
       }, 250);
     };
   }
+
+function openEditModal(id, fullName, username, role) {
+  document.getElementById('editUserId').value = id;
+  document.getElementById('editFullName').value = fullName;
+  document.getElementById('editUsername').value = username;
+  document.getElementById('editPassword').value = '';
+  document.getElementById('editRole').value = role;
+  document.getElementById('editMsg').style.display = 'none';
+  const modal = document.getElementById('editModal');
+  modal.style.display = 'flex';
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').style.display = 'none';
+}
+
+function toggleEditPw() {
+  const input = document.getElementById('editPassword');
+  const btn = document.getElementById('pwToggleBtn');
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = 'Hide';
+  } else {
+    input.type = 'password';
+    btn.textContent = 'Show';
+  }
+}
+
+// Edit users information
+async function saveEdit() {
+  const id       = document.getElementById('editUserId').value;
+  const fullName = document.getElementById('editFullName').value.trim();
+  const username = document.getElementById('editUsername').value.trim();
+  const password = document.getElementById('editPassword').value;
+  const role     = document.getElementById('editRole').value;
+  const msg      = document.getElementById('editMsg');
+
+  if (!fullName || !username) {
+    msg.textContent = 'Full name and username are required.';
+    msg.style.cssText = 'display:block;background:var(--ember-dim);color:var(--ember);padding:8px 10px;border-radius:7px;font-size:13px;';
+    return;
+  }
+  if (password && password.length < 8) {
+    msg.textContent = 'Password must be at least 8 characters.';
+    msg.style.cssText = 'display:block;background:var(--ember-dim);color:var(--ember);padding:8px 10px;border-radius:7px;font-size:13px;';
+    return;
+  }
+
+  const res = await fetch('api/update_user.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id, full_name: fullName, username, password, role })
+  });
+  const data = await res.json();
+
+  if (data.ok) {
+    msg.textContent = 'Saved!';
+    msg.style.cssText = 'display:block;background:var(--green-dim);color:var(--green);padding:8px 10px;border-radius:7px;font-size:13px;';
+    setTimeout(() => { closeEditModal(); location.reload(); }, 800);
+  } else {
+    msg.textContent = data.error || 'Something went wrong.';
+    msg.style.cssText = 'display:block;background:var(--ember-dim);color:var(--ember);padding:8px 10px;border-radius:7px;font-size:13px;';
+  }
+}
 
   /* ---------------- ADMIN: LOG INCIDENT ---------------- */
   const submitBtn = document.getElementById('submitIncident');

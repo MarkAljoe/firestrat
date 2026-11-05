@@ -61,6 +61,7 @@ main{flex:1;min-width:0;padding:22px 28px 60px;}
 
 /* ---------- GRID / PANELS ---------- */
 .grid{display:grid;grid-template-columns:2.1fr 1fr;gap:16px;align-items:start;}
+#mainGrid{align-items:start;grid-template-rows:auto;}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
 .panel-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap;gap:8px;}
 .panel-head h3{margin:0;font-family:'Oswald';font-size:15px;font-weight:600;}
@@ -68,7 +69,8 @@ main{flex:1;min-width:0;padding:22px 28px 60px;}
 .legend span{display:flex;align-items:center;gap:5px;}
 .legend i{width:9px;height:9px;border-radius:50%;display:inline-block;}
 
-#map{height:400px;width:100%;background:var(--panel-2);}
+#map{height:auto;width:100%;background:var(--panel-2);}
+#map-container{height:420px;width:100%;}
 .leaflet-popup-content-wrapper{background:var(--panel);color:var(--ink);border-radius:8px;}
 .leaflet-popup-tip{background:var(--panel);}
 .map-pin{border-radius:50%;border:2.5px solid var(--panel);box-shadow:0 2px 6px rgba(0,0,0,.3);}
